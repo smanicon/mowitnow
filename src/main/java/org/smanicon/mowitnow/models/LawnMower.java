@@ -29,4 +29,8 @@ public class LawnMower {
         position = position.movePosition(direction);
     }
 
+    @Override
+    public String toString() {
+        return "LawnMower{" + "position=" + position + ", direction=" + direction + '}';
+    }
 }
