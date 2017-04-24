@@ -1,15 +1,15 @@
 package org.smanicon.mowitnow.parser;
 
-import org.assertj.core.api.Assertions;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.mockito.Mockito;
 import org.smanicon.mowitnow.models.*;
 
 import java.io.*;
 
 import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.smanicon.mowitnow.parser.InstructionSet.*;
 
 public class InstructionParserTest {
 
@@ -21,8 +21,8 @@ public class InstructionParserTest {
         InstructionParser parser = InstructionParser.parse(new StringReader("6 7"));
         BoundedLawn lawn = parser.parseBoundedLawn();
 
-        Assertions.assertThat(lawn.getWidth()).isEqualTo(6);
-        Assertions.assertThat(lawn.getHeight()).isEqualTo(7);
+        assertThat(lawn.getWidth()).isEqualTo(6);
+        assertThat(lawn.getHeight()).isEqualTo(7);
     }
 
     @Test
@@ -30,8 +30,8 @@ public class InstructionParserTest {
         InstructionParser parser = InstructionParser.parse(new StringReader("4 5"));
         BoundedLawn lawn = parser.parseBoundedLawn();
 
-        Assertions.assertThat(lawn.getWidth()).isEqualTo(4);
-        Assertions.assertThat(lawn.getHeight()).isEqualTo(5);
+        assertThat(lawn.getWidth()).isEqualTo(4);
+        assertThat(lawn.getHeight()).isEqualTo(5);
     }
 
     @Test
@@ -89,8 +89,8 @@ public class InstructionParserTest {
         InstructionParser parser = InstructionParser.parse(new StringReader("1 2 N"));
         LawnMower lawnMower = parser.parseLawnMower(new BoundedLawn(10, 10));
 
-        Assertions.assertThat(lawnMower.getPosition()).isEqualTo(new Position(1, 2));
-        Assertions.assertThat(lawnMower.getDirection()).isEqualTo(Direction.NORTH);
+        assertThat(lawnMower.getPosition()).isEqualTo(new Position(1, 2));
+        assertThat(lawnMower.getDirection()).isEqualTo(Direction.NORTH);
     }
 
     @Test
@@ -98,8 +98,8 @@ public class InstructionParserTest {
         InstructionParser parser = InstructionParser.parse(new StringReader("2 3 S"));
         LawnMower lawnMower = parser.parseLawnMower(new BoundedLawn(10, 10));
 
-        Assertions.assertThat(lawnMower.getPosition()).isEqualTo(new Position(2, 3));
-        Assertions.assertThat(lawnMower.getDirection()).isEqualTo(Direction.SOUTH);
+        assertThat(lawnMower.getPosition()).isEqualTo(new Position(2, 3));
+        assertThat(lawnMower.getDirection()).isEqualTo(Direction.SOUTH);
     }
 
     @Test
@@ -107,8 +107,8 @@ public class InstructionParserTest {
         InstructionParser parser = InstructionParser.parse(new StringReader("3 4 E"));
         LawnMower lawnMower = parser.parseLawnMower(new BoundedLawn(10, 10));
 
-        Assertions.assertThat(lawnMower.getPosition()).isEqualTo(new Position(3, 4));
-        Assertions.assertThat(lawnMower.getDirection()).isEqualTo(Direction.EAST);
+        assertThat(lawnMower.getPosition()).isEqualTo(new Position(3, 4));
+        assertThat(lawnMower.getDirection()).isEqualTo(Direction.EAST);
     }
 
     @Test
@@ -116,8 +116,8 @@ public class InstructionParserTest {
         InstructionParser parser = InstructionParser.parse(new StringReader("4 5 W"));
         LawnMower lawnMower = parser.parseLawnMower(new BoundedLawn(10, 10));
 
-        Assertions.assertThat(lawnMower.getPosition()).isEqualTo(new Position(4, 5));
-        Assertions.assertThat(lawnMower.getDirection()).isEqualTo(Direction.WEST);
+        assertThat(lawnMower.getPosition()).isEqualTo(new Position(4, 5));
+        assertThat(lawnMower.getDirection()).isEqualTo(Direction.WEST);
     }
 
     @Test
@@ -171,5 +171,39 @@ public class InstructionParserTest {
         thrown.expectMessage("Can't create LawnMower : Invalid direction [A] - at line [5 5 A]");
 
         parser.parseLawnMower(new BoundedLawn(10, 10));
+    }
+
+    @Test
+    public void should_parse_instruction_turn_right() throws IOException, InstructionParserException {
+        InstructionParser parser = InstructionParser.parse(new StringReader("D"));
+        assertThat(parser.parseMowerInstructions()).containsOnly(D);
+    }
+
+    @Test
+    public void should_parse_instruction_turn_left() throws IOException, InstructionParserException {
+        InstructionParser parser = InstructionParser.parse(new StringReader("G"));
+        assertThat(parser.parseMowerInstructions()).containsOnly(G);
+    }
+
+    @Test
+    public void should_parse_instruction_move() throws IOException, InstructionParserException {
+        InstructionParser parser = InstructionParser.parse(new StringReader("A"));
+        assertThat(parser.parseMowerInstructions()).containsOnly(A);
+    }
+
+    @Test
+    public void should_throw_exception_if_invalid_instruction_found() throws IOException, InstructionParserException {
+        InstructionParser parser = InstructionParser.parse(new StringReader("F"));
+
+        thrown.expect(InstructionParserException.class);
+        thrown.expectMessage("Can't create Instruction List : [F] is invalid instruction - at line [F]");
+
+        parser.parseMowerInstructions();
+    }
+
+    @Test
+    public void should_parse_many_instructions() throws IOException, InstructionParserException {
+        InstructionParser parser = InstructionParser.parse(new StringReader("ADGGDA"));
+        assertThat(parser.parseMowerInstructions()).containsExactly(A, D, G, G, D, A);
     }
 }

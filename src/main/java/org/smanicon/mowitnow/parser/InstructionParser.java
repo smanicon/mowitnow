@@ -5,6 +5,8 @@ import org.smanicon.mowitnow.models.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 class InstructionParser {
@@ -95,5 +97,30 @@ class InstructionParser {
             String errorMessage = String.format("Can't create " + objectToCreate + " : " + argumentExpected + " arguments expected, %d found", argumentCount);
             throw new InstructionParserException(errorMessage, line);
         }
+    }
+
+    public List<InstructionSet> parseMowerInstructions() throws IOException, InstructionParserException {
+        String line = bufferedReader.readLine();
+        return parseMowerInstructions(line);
+    }
+
+    private List<InstructionSet> parseMowerInstructions(String line) throws InstructionParserException {
+        List<InstructionSet> instructions = new ArrayList<>(line.length());
+
+        for (char c : line.toCharArray()) {
+            instructions.add(parseInstructionSet(c, "Instruction List", line));
+        }
+        return instructions;
+    }
+
+    private InstructionSet parseInstructionSet(char c, String objectToCreate, String line) throws InstructionParserException {
+        InstructionSet instructionSet;
+        try {
+            instructionSet = InstructionSet.valueOf(String.valueOf(c));
+        } catch (IllegalArgumentException e) {
+            String errorMsg = "Can't create " + objectToCreate + " : [" + c + "] is invalid instruction";
+            throw new InstructionParserException(e, errorMsg, line);
+        }
+        return instructionSet;
     }
 }
