@@ -8,9 +8,14 @@ public class LawnMower {
     }
 
     public void turnRight() {
+        direction = direction.getRight();
+    }
+
+    public void turnLeft() {
+        direction = direction.getLeft();
     }
 
     public Direction getDirection() {
-        return direction.getRight();
+        return direction;
     }
 }

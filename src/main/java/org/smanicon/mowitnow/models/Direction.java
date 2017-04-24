@@ -4,6 +4,7 @@ public enum Direction {
     NORTH, SOUTH, WEST, EAST;
 
     private Direction right;
+    private Direction left;
 
     static {
         NORTH.right = EAST;
@@ -12,7 +13,18 @@ public enum Direction {
         EAST.right = SOUTH;
     }
 
+    static {
+        NORTH.left = WEST;
+        SOUTH.left = EAST;
+        WEST.left = SOUTH;
+        EAST.left = NORTH;
+    }
+
     public Direction getRight() {
         return right;
+    }
+
+    public Direction getLeft() {
+        return left;
     }
 }

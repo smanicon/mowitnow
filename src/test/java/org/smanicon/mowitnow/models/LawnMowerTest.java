@@ -40,4 +40,41 @@ public class LawnMowerTest {
 
         assertThat(lawnMower.getDirection()).isEqualTo(Direction.NORTH);
     }
+
+    @Test
+    public void should_look_WEST_when_turn_left_and_initial_direction_was_NORTH() {
+        LawnMower lawnMower = new LawnMower(Direction.NORTH);
+
+        lawnMower.turnLeft();
+
+        assertThat(lawnMower.getDirection()).isEqualTo(Direction.WEST);
+    }
+
+    @Test
+    public void should_look_SOUTH_when_turn_left_and_initial_direction_was_WEST() {
+        LawnMower lawnMower = new LawnMower(Direction.WEST);
+
+        lawnMower.turnLeft();
+
+        assertThat(lawnMower.getDirection()).isEqualTo(Direction.SOUTH);
+    }
+
+    @Test
+    public void should_look_EAST_when_turn_left_and_initial_direction_was_SOUTH() {
+        LawnMower lawnMower = new LawnMower(Direction.SOUTH);
+
+        lawnMower.turnLeft();
+
+        assertThat(lawnMower.getDirection()).isEqualTo(Direction.EAST);
+    }
+
+    @Test
+    public void should_look_NORTH_when_turn_left_and_initial_direction_was_EAST() {
+        LawnMower lawnMower = new LawnMower(Direction.EAST);
+
+        lawnMower.turnLeft();
+
+        assertThat(lawnMower.getDirection()).isEqualTo(Direction.NORTH);
+    }
+
 }
