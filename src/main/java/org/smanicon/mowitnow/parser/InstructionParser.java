@@ -2,26 +2,27 @@ package org.smanicon.mowitnow.parser;
 
 import org.smanicon.mowitnow.models.*;
 
-import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.StringTokenizer;
 
-class InstructionParser {
-    private final BufferedReader bufferedReader;
+public class InstructionParser implements Closeable {
+    private final Scanner scanner;
 
-    public static InstructionParser parse(Reader r) throws IOException, InstructionParserException {
-        return new InstructionParser(new BufferedReader(r));
+    public static InstructionParser parse(Reader r) throws IOException {
+        return new InstructionParser(new Scanner(r));
     }
 
-    public InstructionParser(BufferedReader bufferedReader) {
-        this.bufferedReader = bufferedReader;
+    public InstructionParser(Scanner scanner) {
+        this.scanner = scanner;
     }
 
     public BoundedLawn parseBoundedLawn() throws IOException, InstructionParserException {
-        return parseBoundedLawn(bufferedReader.readLine());
+        return parseBoundedLawn(scanner.nextLine());
     }
 
     private BoundedLawn parseBoundedLawn(String line) throws InstructionParserException {
@@ -36,11 +37,10 @@ class InstructionParser {
     }
 
     public LawnMower parseLawnMower(Lawn lawn) throws IOException, InstructionParserException {
-        String line = bufferedReader.readLine();
-        return getLawnMower(line, lawn);
+        return parseLawnMower(scanner.nextLine(), lawn);
     }
 
-    private LawnMower getLawnMower(String line, Lawn lawn) throws InstructionParserException {
+    private LawnMower parseLawnMower(String line, Lawn lawn) throws InstructionParserException {
         StringTokenizer tokenizer = new StringTokenizer(line);
 
         checkArgumentCount(tokenizer, 3, line, "LawnMower");
@@ -100,8 +100,7 @@ class InstructionParser {
     }
 
     public List<InstructionSet> parseMowerInstructions() throws IOException, InstructionParserException {
-        String line = bufferedReader.readLine();
-        return parseMowerInstructions(line);
+        return parseMowerInstructions(scanner.nextLine());
     }
 
     private List<InstructionSet> parseMowerInstructions(String line) throws InstructionParserException {
@@ -122,5 +121,14 @@ class InstructionParser {
             throw new InstructionParserException(e, errorMsg, line);
         }
         return instructionSet;
+    }
+
+    public boolean hasNextInstruction() {
+        return scanner.hasNextLine();
+    }
+
+    @Override
+    public void close() throws IOException {
+        scanner.close();
     }
 }
