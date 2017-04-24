@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class LawnMowerTest {
     @Test
     public void should_look_EAST_when_turn_right_and_initial_direction_was_NORTH() {
-        LawnMower lawnMower = new LawnMower(new Position(0, 0), Direction.NORTH);
+        LawnMower lawnMower = new LawnMower(new Position(0, 0), Direction.NORTH, new Lawn(5,5));
 
         lawnMower.turnRight();
 
@@ -16,7 +16,7 @@ public class LawnMowerTest {
 
     @Test
     public void should_look_SOUTH_when_turn_right_and_initial_direction_was_EAST() {
-        LawnMower lawnMower = new LawnMower(new Position(0, 0), Direction.EAST);
+        LawnMower lawnMower = new LawnMower(new Position(0, 0), Direction.EAST, new Lawn(5,5));
 
         lawnMower.turnRight();
 
@@ -25,7 +25,7 @@ public class LawnMowerTest {
 
     @Test
     public void should_look_WEST_when_turn_right_and_initial_direction_was_SOUTH() {
-        LawnMower lawnMower = new LawnMower(new Position(0, 0), Direction.SOUTH);
+        LawnMower lawnMower = new LawnMower(new Position(0, 0), Direction.SOUTH, new Lawn(5,5));
 
         lawnMower.turnRight();
 
@@ -34,7 +34,7 @@ public class LawnMowerTest {
 
     @Test
     public void should_look_NORTH_when_turn_right_and_initial_direction_was_WEST() {
-        LawnMower lawnMower = new LawnMower(new Position(0, 0), Direction.WEST);
+        LawnMower lawnMower = new LawnMower(new Position(0, 0), Direction.WEST, new Lawn(5,5));
 
         lawnMower.turnRight();
 
@@ -43,7 +43,7 @@ public class LawnMowerTest {
 
     @Test
     public void should_look_WEST_when_turn_left_and_initial_direction_was_NORTH() {
-        LawnMower lawnMower = new LawnMower(new Position(0, 0), Direction.NORTH);
+        LawnMower lawnMower = new LawnMower(new Position(0, 0), Direction.NORTH, new Lawn(5,5));
 
         lawnMower.turnLeft();
 
@@ -52,7 +52,7 @@ public class LawnMowerTest {
 
     @Test
     public void should_look_SOUTH_when_turn_left_and_initial_direction_was_WEST() {
-        LawnMower lawnMower = new LawnMower(new Position(0, 0), Direction.WEST);
+        LawnMower lawnMower = new LawnMower(new Position(0, 0), Direction.WEST, new Lawn(5,5));
 
         lawnMower.turnLeft();
 
@@ -61,7 +61,7 @@ public class LawnMowerTest {
 
     @Test
     public void should_look_EAST_when_turn_left_and_initial_direction_was_SOUTH() {
-        LawnMower lawnMower = new LawnMower(new Position(0, 0), Direction.SOUTH);
+        LawnMower lawnMower = new LawnMower(new Position(0, 0), Direction.SOUTH, new Lawn(5,5));
 
         lawnMower.turnLeft();
 
@@ -70,7 +70,7 @@ public class LawnMowerTest {
 
     @Test
     public void should_look_NORTH_when_turn_left_and_initial_direction_was_EAST() {
-        LawnMower lawnMower = new LawnMower(new Position(0, 0), Direction.EAST);
+        LawnMower lawnMower = new LawnMower(new Position(0, 0), Direction.EAST, new Lawn(5,5));
 
         lawnMower.turnLeft();
 
@@ -79,7 +79,7 @@ public class LawnMowerTest {
 
     @Test
     public void should_move_on_top_case_when_direction_is_NORTH() {
-        LawnMower lawnMower = new LawnMower(new Position(1, 1), Direction.NORTH);
+        LawnMower lawnMower = new LawnMower(new Position(1, 1), Direction.NORTH, new Lawn(5,5));
 
         lawnMower.move();
 
@@ -88,7 +88,7 @@ public class LawnMowerTest {
 
     @Test
     public void should_move_on_bottom_case_when_direction_is_SOUTH() {
-        LawnMower lawnMower = new LawnMower(new Position(1, 1), Direction.SOUTH);
+        LawnMower lawnMower = new LawnMower(new Position(1, 1), Direction.SOUTH, new Lawn(5,5));
 
         lawnMower.move();
 
@@ -97,7 +97,7 @@ public class LawnMowerTest {
 
     @Test
     public void should_move_on_left_case_when_direction_is_WEST() {
-        LawnMower lawnMower = new LawnMower(new Position(1, 1), Direction.WEST);
+        LawnMower lawnMower = new LawnMower(new Position(1, 1), Direction.WEST, new Lawn(5,5));
 
         lawnMower.move();
 
@@ -106,11 +106,46 @@ public class LawnMowerTest {
 
     @Test
     public void should_move_on_right_case_when_direction_is_EAST() {
-        LawnMower lawnMower = new LawnMower(new Position(1, 1), Direction.EAST);
+        LawnMower lawnMower = new LawnMower(new Position(1, 1), Direction.EAST, new Lawn(5,5));
 
         lawnMower.move();
 
         assertThat(lawnMower.getPosition()).isEqualTo(new Position(2, 1));
     }
 
+    @Test
+    public void should_block_when_try_to_go_on_invalid_cells_WEST_side() {
+        LawnMower lawnMower = new LawnMower(new Position(0, 5), Direction.WEST, new Lawn(5,5));
+
+        lawnMower.move();
+
+        assertThat(lawnMower.getPosition()).isEqualTo(new Position(0, 5));
+    }
+
+    @Test
+    public void should_block_when_try_to_go_on_invalid_cells_SOUTH_side() {
+        LawnMower lawnMower = new LawnMower(new Position(5, 0), Direction.SOUTH, new Lawn(5,5));
+
+        lawnMower.move();
+
+        assertThat(lawnMower.getPosition()).isEqualTo(new Position(5, 0));
+    }
+
+    @Test
+    public void should_block_when_try_to_go_on_invalid_cells_NORTH_side() {
+        LawnMower lawnMower = new LawnMower(new Position(0, 5), Direction.NORTH, new Lawn(5,5));
+
+        lawnMower.move();
+
+        assertThat(lawnMower.getPosition()).isEqualTo(new Position(0, 5));
+    }
+
+    @Test
+    public void should_block_when_try_to_go_on_invalid_cells_EAST_side() {
+        LawnMower lawnMower = new LawnMower(new Position(5, 0), Direction.EAST, new Lawn(5,5));
+
+        lawnMower.move();
+
+        assertThat(lawnMower.getPosition()).isEqualTo(new Position(5, 0));
+    }
 }
