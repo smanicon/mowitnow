@@ -8,7 +8,7 @@ public class InstructionParserException extends Exception {
     }
 
     public InstructionParserException(Exception e, String msg, String line) {
-        super(msg + " - at line [" + line + "]", e);
+        super(msg + ((line == null) ? "" : " - at line [" + line + "]"), e);
         this.line = line;
     }
 
