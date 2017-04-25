@@ -10,14 +10,14 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
-public class InstructionParser implements Closeable {
+class InstructionParser implements Closeable {
     private final Scanner scanner;
 
     public static InstructionParser parse(Reader r) throws IOException {
         return new InstructionParser(new Scanner(r));
     }
 
-    public InstructionParser(Scanner scanner) {
+    private InstructionParser(Scanner scanner) {
         this.scanner = scanner;
     }
 
