@@ -20,12 +20,10 @@ public class InstructionParserTest {
     private InstructionParser parser = null;
 
     @After
-    public void tearDown() {
-       try {
-           if(parser != null) {
-                   parser.close();
-           }
-       } catch (IOException e) { }
+    public void tearDown() throws IOException {
+       if(parser != null) {
+               parser.close();
+       }
     }
 
     private void buildParserFromString(String s) throws IOException {
