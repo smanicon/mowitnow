@@ -2,6 +2,7 @@ package org.smanicon.mowitnow.parser;
 
 import org.smanicon.mowitnow.models.BoundedLawn;
 import org.smanicon.mowitnow.models.LawnMower;
+import org.smanicon.mowitnow.models.LawnMowerView;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -13,7 +14,7 @@ import java.util.NoSuchElementException;
 public class LawnMowerProgramRunner {
 
     private final Reader programReader;
-    private List<LawnMower> lawnMowers;
+    private List<LawnMowerView> lawnMowers;
 
     public LawnMowerProgramRunner(Reader programReader) {
         this.programReader = programReader;
@@ -23,18 +24,18 @@ public class LawnMowerProgramRunner {
         try (InstructionParser parser = InstructionParser.parse(programReader)) {
             BoundedLawn lawnGridBounded = parser.parseBoundedLawn();
 
-            lawnMowers = getLawnMowerAfterTheyMoved(parser, lawnGridBounded);
+            lawnMowers = getLawnMowerViewAfterTheyMoved(parser, lawnGridBounded);
         } catch (NoSuchElementException e) {
             throw new InstructionParserException(e, "Error parsing program, instruction missing", null);
         }
     }
 
-    private List<LawnMower> getLawnMowerAfterTheyMoved(InstructionParser parser, BoundedLawn lawnGridBounded) throws IOException, InstructionParserException {
-        List<LawnMower> lawnMowerAfterProgramRan = new LinkedList<>();
+    private List<LawnMowerView> getLawnMowerViewAfterTheyMoved(InstructionParser parser, BoundedLawn lawnGridBounded) throws IOException, InstructionParserException {
+        List<LawnMowerView> lawnMowerAfterProgramRan = new LinkedList<>();
         while (parser.hasNextInstruction()) {
             LawnMower lawnMower = runLawnMowerProgram(parser, lawnGridBounded);
 
-            lawnMowerAfterProgramRan.add(lawnMower);
+            lawnMowerAfterProgramRan.add(new LawnMowerView(lawnMower));
         }
         return lawnMowerAfterProgramRan;
     }
@@ -49,7 +50,7 @@ public class LawnMowerProgramRunner {
         return lawnMower;
     }
 
-    public List<LawnMower> getLawnMower() {
+    public List<LawnMowerView> getLawnMower() {
         return Collections.unmodifiableList(lawnMowers);
     }
 }
