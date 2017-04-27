@@ -67,4 +67,14 @@ public class BoundedLawnTest {
         Position position = new Position(2, 6);
         Assertions.assertThat(lawn.isCellCanBeMowed(position)).isFalse();
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void should_throw_exception_when_Lawn_width_is_negative() {
+        new BoundedLawn(-1, 5);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void should_throw_exception_when_Lawn_height_is_negative() {
+        new BoundedLawn(5, -5);
+    }
 }
